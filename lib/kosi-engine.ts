@@ -1,0 +1,22 @@
+export type Mode = "chat" | "research" | "sports" | "video" | "image" | "voice" | "code" | "study" | "writer" | "business" | "documents" | "music" | "slides";
+export type Reply = { title: string; body: string; bullets?: string[]; note?: string };
+const modeCopy: Record<Mode, Reply> = {
+chat:{title:"Let's work through it.",body:"I'm Kosi, your workspace companion. Tell me what you're trying to understand, plan or create, and we'll break it into useful steps.",bullets:["Ask a question","Paste text to improve","Describe a problem you want to solve"],note:"Local preview engine · connect an AI provider to enable generated answers."},
+research:{title:"Research workspace ready",body:"Set a research question and define what a useful answer should contain. A connected search and AI provider will be needed for live sources and verified findings.",bullets:["Research question","Key subtopics","Evidence and source requirements"],note:"No live web research is running in this preview."},
+sports:{title:"Sports desk",body:"Explore fixtures, form, head-to-head records and match statistics. Live scores, team news and predictions need a sports data feed before they can be verified.",bullets:["Football · Basketball · Tennis","Form and head-to-head analysis","Goals · corners · cards · player stats"],note:"Demo workspace — no live fixtures or odds are being supplied."},
+video:{title:"Your video studio",body:"Shape an idea into a production brief. Video rendering will be enabled when a video-generation provider is connected.",bullets:["Text-to-video concepts","Image-to-video briefs","Social clips and advert scripts"],note:"This creates a brief only; it does not render a video yet."},
+image:{title:"Image creation studio",body:"Describe the visual you want, including subject, style, framing and intended use. Image generation can be plugged in later.",bullets:["Campaign artwork","Product visuals","Logos and social graphics"],note:"Prompt planning only in this preview."},
+voice:{title:"Voice room",body:"Plan a spoken interaction, transcription or narration workflow. Microphone and speech services are not connected in this build.",bullets:["Voice conversation","Speech transcription","Natural narration"],note:"Voice services require a provider and browser permission."},
+code:{title:"Code companion",body:"Describe the feature or bug. I can help structure a technical task here; live code generation requires an AI model connection.",bullets:["Explain a codebase","Plan an implementation","Debug an error"],note:"Local preview engine."},
+study:{title:"Study room",body:"Turn a topic into a learning plan with explanations, practice questions and revision sessions.",bullets:["Personal study plans","Practice quizzes","Flashcards and summaries"],note:"Connect an AI provider for personalised generated lessons."},
+writer:{title:"Writing desk",body:"Choose the audience, purpose and tone. Build a clear brief before drafting.",bullets:["Emails and proposals","CVs and applications","Articles and social content"],note:"Draft generation will use a connected model."},
+business:{title:"Business lab",body:"Work on a business idea, customer problem, offer and route to market.",bullets:["Business model canvas","Marketing plans","Competitor research"],note:"Market facts require current sources."},
+documents:{title:"Document intelligence",body:"Prepare to review PDFs, reports and spreadsheets. File upload and extraction are not connected in this first preview.",bullets:["Ask questions about a file","Summarise long reports","Extract action items"],note:"Document processing will be added with secure storage."},
+music:{title:"Music room",body:"Develop an original music concept, mood, arrangement and production brief.",bullets:["Song concepts","Original lyrics","Sound and production briefs"],note:"No existing copyrighted music is reproduced."},
+slides:{title:"Presentation studio",body:"Plan a persuasive presentation with a clear story and slide-by-slide structure.",bullets:["Pitch decks","Training presentations","Reports and proposals"],note:"Export and slide generation are planned integrations."}
+};
+export function getModeReply(mode: Mode, prompt: string): Reply {
+ const base=modeCopy[mode];
+ if(!prompt.trim()) return base;
+ return {title:"A good starting point",body:'I’ve captured your '+mode+' request: “'+prompt.trim()+'”. A useful next step is to clarify the audience, the outcome you want, and any constraints.',bullets:base.bullets,note:base.note};
+}
