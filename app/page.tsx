@@ -30,10 +30,10 @@ export default function Home() {
   const [active, setActive] = useState<Mode>("chat");
   const [prompt, setPrompt] = useState("");
   const [answer, setAnswer] = useState<{ title: string; body: string; bullets?: string[]; note?: string } | null>(null);
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<string[]>([]);\n  const [historyLoaded, setHistoryLoaded] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  const current = useMemo(() => modes.find((m) => m.id === active)!, [active]);\n\n  useEffect(() => {\n    try {\n      const saved = window.localStorage.getItem("kosi-ai-history-v1");\n      if (saved) {\n        const parsed: unknown = JSON.parse(saved);\n        if (Array.isArray(parsed)) setHistory(parsed.filter((item): item is string => typeof item === "string").slice(0, 5));\n      }\n    } catch { /* Ignore unavailable or invalid local browser storage. */ }\n  }, []);\n\n  useEffect(() => {\n    try { window.localStorage.setItem("kosi-ai-history-v1", JSON.stringify(history.slice(0, 5))); }\n    catch { /* The app remains usable when browser storage is unavailable. */ }\n  }, [history]);
+  const current = useMemo(() => modes.find((m) => m.id === active)!, [active]);\n\n  useEffect(() => {\n    try {\n      const saved = window.localStorage.getItem("kosi-ai-history-v1");\n      if (saved) {\n        const parsed: unknown = JSON.parse(saved);\n        if (Array.isArray(parsed)) setHistory(parsed.filter((item): item is string => typeof item === "string").slice(0, 5));\n      }\n    } catch { /* Ignore unavailable or invalid local browser storage. */ }\n    setHistoryLoaded(true);\n  }, []);\n\n  useEffect(() => {\n    if (!historyLoaded) return;\n    try { window.localStorage.setItem("kosi-ai-history-v1", JSON.stringify(history.slice(0, 5))); }\n    catch { /* The app remains usable when browser storage is unavailable. */ }\n  }, [history, historyLoaded]);
 
   function chooseMode(id: Mode) {
     setActive(id); setAnswer(null); setPrompt(""); setSidebarOpen(false);
