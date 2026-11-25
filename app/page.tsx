@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Activity, ArrowDown, ArrowUpRight, AudioLines, BookOpen, Bot, BriefcaseBusiness, Check, ChevronDown, CircleHelp, Code2, Compass, FileText, Film, Globe2, Image as ImageIcon, Layers3, Menu, Mic2, MoreHorizontal, Music2, Plus, Search, Send, Settings2, ShieldCheck, Sparkles, Trophy, WandSparkles, X } from "lucide-react";
 import { getModeReply, type Mode } from "@/lib/kosi-engine";
 
@@ -33,7 +33,7 @@ export default function Home() {
   const [history, setHistory] = useState<string[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
-  const current = useMemo(() => modes.find((m) => m.id === active)!, [active]);
+  const current = useMemo(() => modes.find((m) => m.id === active)!, [active]);\n\n  useEffect(() => {\n    try {\n      const saved = window.localStorage.getItem("kosi-ai-history-v1");\n      if (saved) {\n        const parsed: unknown = JSON.parse(saved);\n        if (Array.isArray(parsed)) setHistory(parsed.filter((item): item is string => typeof item === "string").slice(0, 5));\n      }\n    } catch { /* Ignore unavailable or invalid local browser storage. */ }\n  }, []);\n\n  useEffect(() => {\n    try { window.localStorage.setItem("kosi-ai-history-v1", JSON.stringify(history.slice(0, 5))); }\n    catch { /* The app remains usable when browser storage is unavailable. */ }\n  }, [history]);
 
   function chooseMode(id: Mode) {
     setActive(id); setAnswer(null); setPrompt(""); setSidebarOpen(false);
@@ -127,7 +127,7 @@ export default function Home() {
             </>
           )}
 
-          {history.length > 0 && <section className="recent-section"><div className="eyebrow small-eyebrow">RECENT THOUGHTS</div><div className="recent-list">{history.slice(0,3).map((item) => <button key={item} onClick={() => setPrompt(item)}><span className="recent-bullet"/><span>{item}</span><ArrowUpRight size={13}/></button>)}</div></section>}
+          {history.length > 0 && <section className="recent-section"><div className="recent-heading"><div className="eyebrow small-eyebrow">RECENT THOUGHTS · SAVED ON THIS DEVICE</div><button className="clear-history" onClick={() => setHistory([])}>Clear history</button></div><div className="recent-list">{history.slice(0,3).map((item) => <button key={item} onClick={() => setPrompt(item)}><span className="recent-bullet"/><span>{item}</span><ArrowUpRight size={13}/></button>)}</div></section>}
           <footer className="footer"><span>© 2026 KOSI AI</span><span>BUILT FOR CURIOUS MINDS <span className="footer-star">✳</span></span><span>THINK CLEARER. GO FURTHER.</span></footer>
         </div>
       </section>
